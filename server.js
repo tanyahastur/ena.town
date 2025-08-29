@@ -21,6 +21,13 @@ app.use(express.json());
 // app.use('/auth', authRouter);
 
 // const server = http.createServer(app);
+
+const options = {
+    key: fs.readFileSync('key.pem'),
+    cert: fs.readFileSync('cert.pem')
+};
+
+const server = https.createServer(options, app);
 const wss = new WebSocket.Server({ server });
 
 app.use(express.static('src'));
@@ -141,12 +148,7 @@ setInterval(() => {
     }
 }, 100);
 
-const options = {
-    key: fs.readFileSync('key.pem'),
-    cert: fs.readFileSync('cert.pem')
-};
-
 const PORT = 3000;
 https.createServer(options, app).listen(PORT, () => {
-  console.log(`HTTPS Server running at https://localhost:${PORT}`);
+    console.log(`HTTPS Server running at https://localhost:${PORT}`);
 });
