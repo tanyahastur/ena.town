@@ -1,37 +1,15 @@
-// server.js // temp file
 const express = require('express');
-// const session = require('express-session');
 const WebSocket = require('ws');
-const https = require('https');
+const http = require('http');
 const crypto = require('crypto');
-const fs = require('fs');
-// const authRouter = require('./routes/auth');
 
 const app = express();
-
 app.use(express.json());
-// app.use(session({
-//     secret: 'clave_super_secreta',
-//     resave: false,
-//     saveUninitialized: true,
-//     cookie: { secure: false } // true si usas HTTPS
-// }));
 
-// Routes
-// app.use('/auth', authRouter);
-
-// const server = http.createServer(app);
-
-const options = {
-    key: fs.readFileSync('/etc/letsencrypt/live/srv981908.hstgr.cloud/privkey.pem'),
-    cert: fs.readFileSync('/etc/letsencrypt/live/srv981908.hstgr.cloud/fullchain.pem')
-};
-
-const server = https.createServer(options, app);
+const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
 app.use(express.static('src'));
-
 const clients = new Map(); // socket -> { entity, serverProxy, spawned }
 
 function broadcastToAll(message, excludeSocket = null) {
@@ -55,7 +33,6 @@ wss.on('connection', (socket) => {
         connectedAt: undefined
     };
 
-    // Estado: aún no "spawneado"
     clients.set(socket, { entity, serverProxy: null, spawned: false });
 
     const serverProxy = new Proxy({}, {
@@ -148,7 +125,6 @@ setInterval(() => {
     }
 }, 100);
 
-const PORT = 3000;
-https.createServer(options, app).listen(PORT, () => {
-    console.log(`HTTPS Server running at https://localhost:${PORT}`);
+server.listen(3000, () => {
+    console.log(`Server running...`);
 });
