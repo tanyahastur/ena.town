@@ -1,29 +1,30 @@
+// server.js // temp file
 const express = require('express');
-const session = require('express-session');
+// const session = require('express-session');
 const WebSocket = require('ws');
 const http = require('http');
 const crypto = require('crypto');
-const authRouter = require('./routes/auth');
+// const authRouter = require('./routes/auth');
 
 const app = express();
 
 app.use(express.json());
-app.use(session({
-    secret: 'clave_super_secreta',
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false } // true si usas HTTPS
-}));
+// app.use(session({
+//     secret: 'clave_super_secreta',
+//     resave: false,
+//     saveUninitialized: true,
+//     cookie: { secure: false } // true si usas HTTPS
+// }));
 
 // Routes
-app.use('/auth', authRouter);
+// app.use('/auth', authRouter);
 
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
 app.use(express.static('src'));
 
-const clients = new Map();
+const clients = new Map(); // socket -> { entity, serverProxy, spawned }
 
 function broadcastToAll(message, excludeSocket = null) {
     const data = JSON.stringify(message);
@@ -46,6 +47,7 @@ wss.on('connection', (socket) => {
         connectedAt: undefined
     };
 
+    // Estado: aún no "spawneado"
     clients.set(socket, { entity, serverProxy: null, spawned: false });
 
     const serverProxy = new Proxy({}, {
@@ -88,19 +90,13 @@ wss.on('connection', (socket) => {
                     break;
                 }
 
-                case 'syncKeys': {
-                    if (!state.spawned) return;
-                    const [keys] = args || [];
-                    Object.assign(state.entity.keys, keys);
-                    break;
-                }
-
                 default:
                     console.warn(`Method ${key} not defined in serverProxy`);
             }
         }
     });
 
+    // guardar proxy
     clients.get(socket).serverProxy = serverProxy;
 
     socket.on('message', (raw) => {
