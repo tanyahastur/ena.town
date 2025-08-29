@@ -9,7 +9,8 @@ app.use(express.json());
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
-const clients = new Map();
+// app.use(express.static('src'));
+const clients = new Map(); // socket -> { entity, serverProxy, spawned }
 
 function broadcastToAll(message, excludeSocket = null) {
     const data = JSON.stringify(message);
@@ -53,6 +54,7 @@ wss.on('connection', (socket) => {
                     state.entity.connectedAt = Date.now();
                     state.spawned = true;
 
+                    // Enviar playerJoined SOLO al nuevo
                     socket.send(JSON.stringify({ type: 'playerJoined', entity: state.entity }));
                     console.log("playerJoined");
                     break;
@@ -62,7 +64,7 @@ wss.on('connection', (socket) => {
                     if (!state.spawned) return;
                     const [entityId, message, chatType] = args;
                     broadcastToAll({ type: 'say', entityId, message, chatType }, socket);
-                    socket.send(JSON.stringify({ type: 'say', entityId, message, chatType }));
+                    socket.send(JSON.stringify({ type: 'say', entityId, message, chatType })); // eco al propio
                     break;
                 }
 
@@ -123,6 +125,4 @@ setInterval(() => {
     }
 }, 100);
 
-server.listen(3000, () => {
-    console.log(`Server running...`);
-});
+server.listen(3000, '127.0.0.1', () => { console.log('Server running...'); });
