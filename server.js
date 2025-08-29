@@ -148,7 +148,7 @@ setInterval(() => {
     }
 }, 100);
 
-const PORT = 3000;
+const PORT = 443;
 https.createServer(options, app).listen(PORT, () => {
     console.log(`HTTPS Server running at https://localhost:${PORT}`);
 });
