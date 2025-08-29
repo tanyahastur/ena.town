@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Ena Town</title>
+    <link rel="stylesheet" href="css/app.css">
+    <script type="module" crossorigin src="dist/assets/index.js"></script>
+    <link rel="stylesheet" crossorigin href="dist/assets/index.css">
+</head>
+<body>
+    <ena-town-app data-version="1.0.0-alpha">
+        <div id="app-game" class="app-game shift-down">
+            <chat-log id="chat-log" class="is-chatbox-open vertical-bar-space">
+                <div tabindex="-1" class="chat-log shift-down">
+                    <div class="d-flex chat-log-buttons"></div>
+                    <div class="chat-log-content">
+                        <div class="chat-log-tabs">
+                            <a tabindex="" class="link-plain chat-log-tab active" style="background-color: rgba(0, 0, 0, 0.55);">Local</a>
+                        </div>
+                        <div class="chat-log-scroll-outer scroll"><div class="chat-log-scroll-inner" style="font-size: 14px;"></div></div>
+                    </div>
+                </div>
+                <ui-button title="Toggle chatlog" placement="right" class="chat-log-toggle unselectable">
+                    <button style="width: 36px;">
+                        <div class="whispers-count"></div>
+                    </button>
+                </ui-button>
+            </chat-log>
+            <chat-box id="chat-box">
+                <div class="chat-box" hidden>
+                    <div class="chat-say">
+                        <div class="chat-textarea-wrap">
+                            <textarea rows="1" wrap="off" aria-label="Chat message" class="chat-textarea chat-commons hide-scrollbar" maxlength="400"></textarea>
+                        </div>
+                        <div class="chat-box-type">
+                            <span></span>
+                            [<span class="chat-box-type-name">say</span>]:
+                        </div>
+                    </div>
+                </div>
+                <ui-button title="Toggle chat" aria-label="Toggle message" class="chat-open-button unselectable"><button style="width: 36px;"></button></ui-button>
+            </chat-box>
+        </div>
+    </ena-town-app>
+</body>
+</html>
