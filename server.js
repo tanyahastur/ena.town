@@ -9,8 +9,7 @@ app.use(express.json());
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
-app.use(express.static('src'));
-const clients = new Map(); // socket -> { entity, serverProxy, spawned }
+const clients = new Map();
 
 function broadcastToAll(message, excludeSocket = null) {
     const data = JSON.stringify(message);
@@ -54,7 +53,6 @@ wss.on('connection', (socket) => {
                     state.entity.connectedAt = Date.now();
                     state.spawned = true;
 
-                    // Enviar playerJoined SOLO al nuevo
                     socket.send(JSON.stringify({ type: 'playerJoined', entity: state.entity }));
                     console.log("playerJoined");
                     break;
@@ -64,7 +62,7 @@ wss.on('connection', (socket) => {
                     if (!state.spawned) return;
                     const [entityId, message, chatType] = args;
                     broadcastToAll({ type: 'say', entityId, message, chatType }, socket);
-                    socket.send(JSON.stringify({ type: 'say', entityId, message, chatType })); // eco al propio
+                    socket.send(JSON.stringify({ type: 'say', entityId, message, chatType }));
                     break;
                 }
 
