@@ -75,6 +75,13 @@ wss.on('connection', (socket) => {
                     break;
                 }
 
+                case 'ping': {
+                    if (!state.spawned) return;
+                    const [timestamp] = args || [];
+                    socket.send(JSON.stringify({ type: 'pong', ms: timestamp }));
+                    break;
+                }
+
                 default:
                     console.warn(`Method ${key} not defined in serverProxy`);
             }
