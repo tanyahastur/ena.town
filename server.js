@@ -2,8 +2,9 @@
 const express = require('express');
 // const session = require('express-session');
 const WebSocket = require('ws');
-const http = require('http');
+const https = require('https');
 const crypto = require('crypto');
+const fs = require('fs');
 // const authRouter = require('./routes/auth');
 
 const app = express();
@@ -19,7 +20,7 @@ app.use(express.json());
 // Routes
 // app.use('/auth', authRouter);
 
-const server = http.createServer(app);
+// const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
 app.use(express.static('src'));
@@ -140,5 +141,12 @@ setInterval(() => {
     }
 }, 100);
 
+const options = {
+    key: fs.readFileSync('key.pem'),
+    cert: fs.readFileSync('cert.pem')
+};
+
 const PORT = 3000;
-server.listen(PORT, () => console.log(`Server on localhost:${PORT}`));
+https.createServer(options, app).listen(PORT, () => {
+  console.log(`HTTPS Server running at https://localhost:${PORT}`);
+});
