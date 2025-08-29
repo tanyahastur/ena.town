@@ -23,8 +23,8 @@ app.use(express.json());
 // const server = http.createServer(app);
 
 const options = {
-    key: fs.readFileSync('key.pem'),
-    cert: fs.readFileSync('cert.pem')
+    key: fs.readFileSync('/etc/letsencrypt/live/srv981908.hstgr.cloud/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/srv981908.hstgr.cloud/fullchain.pem')
 };
 
 const server = https.createServer(options, app);
