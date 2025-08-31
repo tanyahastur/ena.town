@@ -27,9 +27,7 @@ wss.on('connection', (socket) => {
     const entity = {
         id,
         username: undefined,
-        x: 64,
-        y: 64,
-        keys: { axisX: 0, axisY: 0, shift: 0 },
+        move: 1077936132,
         connectedAt: undefined
     };
 
