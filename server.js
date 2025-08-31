@@ -85,6 +85,6 @@ function broadcastUpdates(clients) {
     }
 }
 
-setInterval(() => { broadcastUpdates(clients); }, 100);
+setInterval(() => { broadcastUpdates(clients); }, 85);
 
 server.listen(3000, '127.0.0.1', () => { console.log('Server running...'); });
