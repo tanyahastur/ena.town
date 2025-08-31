@@ -1,3 +1,4 @@
+// serverProxy.js
 module.exports = function createServerProxy(socket, clients, broadcastToAll) {
     return new Proxy({}, {
         get: (_, key) => (...args) => {
@@ -31,7 +32,7 @@ module.exports = function createServerProxy(socket, clients, broadcastToAll) {
                     break;
                 }
 
-                case 'syncPlayer': {
+                case 'sync': {
                     if (!state.spawned) return;
                     const [data] = args || [];
                     Object.assign(state.entity, data);
